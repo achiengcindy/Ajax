@@ -1,7 +1,7 @@
 (function () {
     const form = document.querySelector('#search-form');
     const searchField = document.querySelector('#search-keyword');
-    let searchedForText = 'hippos';
+    let searchedForText;
     const responseContainer = document.querySelector('#response-container');
     const unsplashRequest = new XMLHttpRequest();
     unsplashRequest.open('GET', `https://api.unsplash.com/search/photos?page=1&query=${searchedForText}`);
@@ -15,10 +15,23 @@
         searchedForText = searchField.value;
     });
     function addImage(){
-        console.log('helloworld')  
+        //debugger; //pause to check what has been returned
+        const data = JSON.parse(this.responseText); //convert json to js object
+        const firstImage = data.results[0];
+
+        if (firstImage) {
+        htmlContent = `<figure>
+        <img src="${firstImage.urls.regular}" alt="${searchedForText}">
+        <figcaption> ${searchedForText} by ${firstImage.user.name}</figcaption>
+        </figure>`;
+        } else {
+            htmlContent = 'Unfortunately, no image was returned for your search.'
+        }
+
+        responseContainer.insertAdjacentHTML('afterbegin',htmlContent);
+
     }
 
 })();
-
 
 
